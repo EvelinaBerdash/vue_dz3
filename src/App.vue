@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <AddButton v-on:show="popupToggle"></AddButton>
+    <AddButton :onClick="popupToggle"></AddButton>
     <List v-bind:list="costsList">
       <template v-slot:head>
         <h2>Мои расходы</h2>
@@ -10,7 +10,7 @@
         <h2>Good bye</h2>
       </template>
     </List>
-    <Form v-if="isPopupActive"></Form>
+    <Form v-if="isPopupActive" :onAdd='onAdd'></Form>
   </div>
 </template>
 
@@ -25,19 +25,30 @@ export default {
   data() {
     return {
       costsList: [],
-      isPopupActive: false
+      isPopupActive: false,
+      nextId: 4,
     }
   },
   methods: {
     fetchData() {
       return [
-        {id: 1, date: '12.09.2022', category: 'food', value: 1582},
-        {id: 2, date: '15.09.2022', category: 'transport', value: 245},
-        {id: 3, date: '20.09.2022', category: 'healthcare', value: 780}
+        { id: 1, date: '12.09.2022', category: 'food', value: 1582 },
+        { id: 2, date: '15.09.2022', category: 'transport', value: 245 },
+        { id: 3, date: '20.09.2022', category: 'healthcare', value: 780 },
       ]
     },
     popupToggle() {
       this.isPopupActive = !this.isPopupActive
+    },
+    onAdd(data) {
+      // let nextId = costsList.map(function(cost),
+      this.costsList.push({
+        id: this.nextId++,
+        date: data.date,
+        category: data.category,
+        value: data.value
+      })
+      //console.log('child component said add', data)
     }
   },
   created() {
